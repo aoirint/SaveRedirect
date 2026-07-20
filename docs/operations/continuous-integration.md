@@ -18,7 +18,8 @@ The workflows verify:
 - full-SHA action pins with a seven-day minimum age;
 - GitHub Actions syntax and expressions;
 - repository Markdown;
-- locked NuGet restore and the exact SDK selection;
+- locked NuGet restore and the stable SDK feature band selected by
+  `global.json`;
 - formatting and warnings-as-errors Release compilation;
 - path-confinement and archive mutation tests;
 - plugin assembly identity and BepInEx attributes; and

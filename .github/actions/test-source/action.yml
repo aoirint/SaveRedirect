@@ -11,13 +11,26 @@ runs:
         cache: true
         cache-dependency-path: "**/packages.lock.json"
 
-    - name: Verify selected SDK
+    - name: Verify selected SDK feature band
       shell: pwsh
       run: |
-        $expected = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
-        $actual = dotnet --version
-        if ($actual -ne $expected) {
-          throw "Expected .NET SDK $expected, got $actual."
+        $minimumText = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
+        $actualText = dotnet --version
+        try {
+          $minimum = [Version]$minimumText
+          $actual = [Version]$actualText
+        } catch {
+          throw "Expected stable .NET SDK version text, got $actualText."
+        }
+        $minimumBand = [Math]::Floor($minimum.Build / 100)
+        $actualBand = [Math]::Floor($actual.Build / 100)
+        if (
+          $actual.Major -ne $minimum.Major -or
+          $actual.Minor -ne $minimum.Minor -or
+          $actualBand -ne $minimumBand -or
+          $actual -lt $minimum
+        ) {
+          throw "Expected .NET SDK $minimumText or newer in its feature band, got $actualText."
         }
 
     - name: Restore locked dependencies

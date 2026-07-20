@@ -14,6 +14,11 @@ All notable development changes are recorded here. This file follows
 - Added validation-only pull-request, merge-queue, and `main` workflows with
   immutable action pins and retained exact-commit development artifacts.
 
+### Fixed
+
+- Aligned CI SDK verification with the patch roll-forward allowed by
+  `global.json`, while retaining its stable feature-band boundary.
+
 ### Notes
 
 - Static evidence covers Lethal Company v81 and LCBetterSaves 1.7.3.
