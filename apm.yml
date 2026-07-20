@@ -1,0 +1,37 @@
+name: save_redirect
+version: 0.1.0
+description: Reproducible agent skills for SaveRedirect maintenance
+author: aoirint
+# Which agent platforms to deploy to.
+# Resolution order: --target flag > this field > auto-detect from filesystem.
+# Accepted values: vscode, agents, copilot, claude, cursor, opencode, codex,
+# gemini, antigravity, windsurf, kiro, agent-skills, all
+targets:
+  - agent-skills
+dependencies:
+  apm:
+    - git: aoirint/skills
+      ref: 7a4042304705253bd5d15f17c3387dc655b11ea0
+      skills:
+        - apm-usage
+        - bepinex-mono-mod-quality-check
+        - changelog-workflow
+        - code-quality-check
+        - commit-message-quality-check
+        - flet-project-quality-check
+        - git-worktree-workflow
+        - github-actions-quality-check
+        - gitignore-workflow
+        - issue-quality-check
+        - lethal-company-analyze
+        - prose-quality-check
+        - pull-request-quality-check
+        - release-note-workflow
+        - rollout-workflow
+        - security-check
+        - skill-quality-check
+        - software-documentation-maintenance
+        - unity-game-analyze
+  mcp: []
+includes: auto
+scripts: {}
