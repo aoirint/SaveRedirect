@@ -35,18 +35,20 @@ sandbox against another plugin executing in the same process.
 dotnet restore SaveRedirect.slnx --locked-mode
 dotnet format SaveRedirect.slnx --no-restore --verify-no-changes
 dotnet build SaveRedirect.slnx --configuration Release --no-restore --warnaserror
+$version = (dotnet msbuild SaveRedirect/SaveRedirect.csproj `
+  -getProperty:Version -nologo).Trim()
+dotnet msbuild SaveRedirect/SaveRedirect.csproj `
+  -target:PackageSaveRedirect -property:Configuration=Release -nologo
 dotnet run --project SaveRedirect.Tests --configuration Release --no-build -- `
-  SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll
-dotnet run --project SaveRedirect.Package --configuration Release --no-build -- pack `
-  --plugin SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
-  --output artifacts/SaveRedirect-0.1.0.zip --version 0.1.0
-dotnet run --project SaveRedirect.Package --configuration Release --no-build -- validate `
-  --archive artifacts/SaveRedirect-0.1.0.zip --version 0.1.0
+  SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
+  "artifacts/SaveRedirect-$version.zip" $version
 ```
 
-The package ZIP is a host-neutral development artifact. No Thunderstore or
-stable GitHub Release publication is configured while live compatibility
-evidence remains incomplete.
+`PackageSaveRedirect` belongs to the plugin project and produces the
+host-neutral development ZIP. `SaveRedirect.Tests` validates the completed
+archive and actual BepInEx assembly attributes. No Thunderstore or stable
+GitHub Release publication is configured while live compatibility evidence
+remains incomplete.
 
 ## Installation
 

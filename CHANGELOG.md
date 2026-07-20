@@ -14,6 +14,16 @@ All notable development changes are recorded here. This file follows
 - Added validation-only pull-request, merge-queue, and `main` workflows with
   immutable action pins and retained exact-commit development artifacts.
 
+### Changed
+
+- Moved host-neutral package creation into the plugin project and retained
+  final-archive and mutation validation in the test project, removing the
+  unnecessary standalone package executable.
+- Kept the loader entry point focused by separating the Harmony adapter and
+  framework-free path policy into cohesive source modules.
+- Adopted the canonical contributor agreement, pull-request confirmation, and
+  line-ending policy with CI drift enforcement.
+
 ### Fixed
 
 - Aligned CI SDK verification with the patch roll-forward allowed by

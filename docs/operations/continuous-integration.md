@@ -17,6 +17,7 @@ The workflows verify:
 
 - full-SHA action pins with a seven-day minimum age;
 - GitHub Actions syntax and expressions;
+- exact canonical contributor, pull-request, and line-ending templates;
 - repository Markdown;
 - locked NuGet restore and the stable SDK feature band selected by
   `global.json`;

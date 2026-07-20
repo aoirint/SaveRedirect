@@ -24,13 +24,16 @@ together through an approved APM update.
 ## Verification
 
 Run the commands in the root README in order. Restore must not change any
-`packages.lock.json`. The test executable validates the path policy and built
-assembly identity. The package command produces exactly one ZIP under
-`artifacts/`; the validation command checks its paths, files, DLL count, and
-BepInEx custom attributes.
+`packages.lock.json`. The plugin project's `PackageSaveRedirect` target stages
+the built DLL and repository-owned package files, normalizes their timestamps,
+and writes one ZIP under `artifacts/`. The test executable validates the path
+policy, archive paths, exact file set, DLL count, resource bounds, and actual
+BepInEx custom attributes in both mutation fixtures and the completed ZIP.
 
 For Markdown changes, run the checked-in Markdown configuration. For workflow
 changes, run `actionlint` followed by `pinact run --check --min-age 7`.
+When a canonical repository template changes, apply and verify it through
+`sync_templates.ps1`; do not edit a synchronized destination directly.
 
 ## Runtime validation
 
