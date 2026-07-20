@@ -11,6 +11,8 @@ All notable development changes are recorded here. This file follows
   SaveRedirect plugin.
 - Added confined Easy Save 3 path resolution, LCBetterSaves-compatible path
   coverage, deterministic packaging, and assembly metadata validation.
+- Added validation-only pull-request, merge-queue, and `main` workflows with
+  immutable action pins and retained exact-commit development artifacts.
 
 ### Notes
 
