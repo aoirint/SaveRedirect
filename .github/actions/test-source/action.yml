@@ -1,0 +1,53 @@
+name: Build and test SaveRedirect
+description: Restore, format, build, test, package, and validate the locked project.
+
+runs:
+  using: composite
+  steps:
+    - name: Set up .NET
+      uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+      with:
+        global-json-file: global.json
+        cache: true
+        cache-dependency-path: "**/packages.lock.json"
+
+    - name: Verify selected SDK
+      shell: pwsh
+      run: |
+        $expected = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
+        $actual = dotnet --version
+        if ($actual -ne $expected) {
+          throw "Expected .NET SDK $expected, got $actual."
+        }
+
+    - name: Restore locked dependencies
+      shell: pwsh
+      run: dotnet restore SaveRedirect.slnx --locked-mode
+
+    - name: Verify formatting
+      shell: pwsh
+      run: dotnet format SaveRedirect.slnx --no-restore --verify-no-changes
+
+    - name: Build
+      shell: pwsh
+      run: >-
+        dotnet build SaveRedirect.slnx --configuration Release --no-restore
+        --warnaserror
+
+    - name: Run boundary and archive tests
+      shell: pwsh
+      run: >-
+        dotnet run --project SaveRedirect.Tests --configuration Release
+        --no-build --
+        SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll
+
+    - name: Create and validate package
+      shell: pwsh
+      run: |
+        dotnet run --project SaveRedirect.Package --configuration Release --no-build -- pack `
+          --plugin SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
+          --output artifacts/SaveRedirect-0.1.0.zip --version 0.1.0
+        dotnet run --project SaveRedirect.Package --configuration Release --no-build -- validate `
+          --archive artifacts/SaveRedirect-0.1.0.zip --version 0.1.0
+        $hash = (Get-FileHash -Algorithm SHA256 artifacts/SaveRedirect-0.1.0.zip).Hash.ToLowerInvariant()
+        "$hash  SaveRedirect-0.1.0.zip" | Set-Content -Encoding ascii artifacts/SHA256SUMS
