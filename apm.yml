@@ -18,7 +18,6 @@ dependencies:
         - changelog-workflow
         - code-quality-check
         - commit-message-quality-check
-        - flet-project-quality-check
         - git-worktree-workflow
         - github-actions-quality-check
         - gitignore-workflow
@@ -29,7 +28,6 @@ dependencies:
         - release-note-workflow
         - rollout-workflow
         - security-check
-        - skill-quality-check
         - software-documentation-maintenance
         - unity-game-analyze
   mcp: []
