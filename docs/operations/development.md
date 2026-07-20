@@ -6,16 +6,35 @@
 - the SDK selected by `global.json`; and
 - network access to the two mapped NuGet feeds for the initial locked restore.
 
+## Agent skills
+
+The repository pins its development skills from `aoirint/skills` in `apm.yml`.
+After installing the reviewed APM CLI, restore the exact selected subset and
+verify its deployed-file hashes:
+
+```powershell
+apm install --frozen --target agent-skills
+apm audit --ci
+```
+
+Do not hand-edit `.agents/skills` or `apm.lock.yaml`. Update the source pin,
+skill selection, lockfile, and [third-party notice](../../THIRD_PARTY_NOTICES.md)
+together through an approved APM update.
+
 ## Verification
 
 Run the commands in the root README in order. Restore must not change any
-`packages.lock.json`. The test executable validates the path policy and built
-assembly identity. The package command produces exactly one ZIP under
-`artifacts/`; the validation command checks its paths, files, DLL count, and
-BepInEx custom attributes.
+`packages.lock.json`. CI stages the built DLL and repository-owned package
+files, normalizes their timestamps, and writes one ZIP under `artifacts/`,
+matching the packaging ownership used by the related BepInEx repositories. The
+test executable validates the path policy, archive paths, exact file set, DLL
+count, resource bounds, and actual BepInEx custom attributes in both mutation
+fixtures and the completed CI ZIP.
 
 For Markdown changes, run the checked-in Markdown configuration. For workflow
 changes, run `actionlint` followed by `pinact run --check --min-age 7`.
+When a canonical repository template changes, apply and verify it through
+`sync_templates.ps1`; do not edit a synchronized destination directly.
 
 ## Runtime validation
 

@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="SaveRedirect/SaveRedirect.csproj" />
-  <Project Path="SaveRedirect.Package/SaveRedirect.Package.csproj" />
   <Project Path="SaveRedirect.Tests/SaveRedirect.Tests.csproj" />
 </Solution>

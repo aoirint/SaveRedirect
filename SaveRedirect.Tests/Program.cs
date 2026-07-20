@@ -3,19 +3,27 @@ using System.IO.Compression;
 using Mono.Cecil;
 
 using SaveRedirect;
-using SaveRedirect.Package;
+using SaveRedirect.Tests;
 
-if (args.Length != 1 || !File.Exists(args[0]))
+if (
+    args.Length is not (2 or 3)
+    || !File.Exists(args[0])
+    || (args.Length == 3 && !File.Exists(args[2]))
+)
 {
-    Console.Error.WriteLine("Pass the built SaveRedirect plugin DLL.");
+    Console.Error.WriteLine("Pass the built plugin DLL, expected version, and optional package ZIP.");
     return 2;
 }
 
 string pluginPath = Path.GetFullPath(args[0]);
-const string version = "0.1.0";
+string version = args[1];
 RunPathPolicyTests();
-ArchiveContract.ValidatePlugin(File.ReadAllBytes(pluginPath), version);
+PackageContract.ValidatePlugin(File.ReadAllBytes(pluginPath), version);
 RunArchiveContractTests(pluginPath, version);
+if (args.Length == 3)
+{
+    PackageContract.Validate(Path.GetFullPath(args[2]), version);
+}
 return 0;
 
 static void RunPathPolicyTests()
@@ -52,18 +60,18 @@ static void RunArchiveContractTests(string pluginPath, string version)
     {
         string valid = Path.Combine(root, "valid.zip");
         WriteArchive(valid, RequiredEntries(File.ReadAllBytes(pluginPath)));
-        ArchiveContract.Validate(valid, version);
+        PackageContract.Validate(valid, version);
 
         Reject(root, "missing.zip", entries => entries.Remove("README.md"), pluginPath, version);
         Reject(root, "unexpected.zip", entries => entries.Add("unexpected.txt", []), pluginPath, version);
         Reject(root, "extra-dll.zip", entries => entries.Add("other.dll", []), pluginPath, version);
-        Reject(root, "corrupt.zip", entries => entries[ArchiveContract.PluginFileName] = [1, 2, 3], pluginPath, version);
-        Reject(root, "wrong-assembly.zip", entries => entries[ArchiveContract.PluginFileName] = MutatePlugin(pluginPath, assembly => assembly.Name.Name = "Wrong"), pluginPath, version);
-        Reject(root, "wrong-guid.zip", entries => entries[ArchiveContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 0, "wrong.guid"), pluginPath, version);
-        Reject(root, "wrong-name.zip", entries => entries[ArchiveContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 1, "Wrong"), pluginPath, version);
-        Reject(root, "wrong-version.zip", entries => entries[ArchiveContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 2, "9.9.9"), pluginPath, version);
-        Reject(root, "wrong-process.zip", entries => entries[ArchiveContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInProcess", 0, "Other.exe"), pluginPath, version);
-        Reject(root, "missing-attribute.zip", entries => entries[ArchiveContract.PluginFileName] = MutatePlugin(pluginPath, assembly => GetPluginType(assembly).CustomAttributes.Remove(GetAttribute(assembly, "BepInEx.BepInProcess"))), pluginPath, version);
+        Reject(root, "corrupt.zip", entries => entries[PackageContract.PluginFileName] = [1, 2, 3], pluginPath, version);
+        Reject(root, "wrong-assembly.zip", entries => entries[PackageContract.PluginFileName] = MutatePlugin(pluginPath, assembly => assembly.Name.Name = "Wrong"), pluginPath, version);
+        Reject(root, "wrong-guid.zip", entries => entries[PackageContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 0, "wrong.guid"), pluginPath, version);
+        Reject(root, "wrong-name.zip", entries => entries[PackageContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 1, "Wrong"), pluginPath, version);
+        Reject(root, "wrong-version.zip", entries => entries[PackageContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInPlugin", 2, "9.9.9"), pluginPath, version);
+        Reject(root, "wrong-process.zip", entries => entries[PackageContract.PluginFileName] = MutateAttribute(pluginPath, "BepInEx.BepInProcess", 0, "Other.exe"), pluginPath, version);
+        Reject(root, "missing-attribute.zip", entries => entries[PackageContract.PluginFileName] = MutatePlugin(pluginPath, assembly => GetPluginType(assembly).CustomAttributes.Remove(GetAttribute(assembly, "BepInEx.BepInProcess"))), pluginPath, version);
 
         string duplicate = Path.Combine(root, "duplicate.zip");
         using (ZipArchive archive = ZipFile.Open(duplicate, ZipArchiveMode.Create))
@@ -74,7 +82,7 @@ static void RunArchiveContractTests(string pluginPath, string version)
             }
             WriteEntry(archive, "README.md", []);
         }
-        Throws<InvalidDataException>(() => ArchiveContract.Validate(duplicate, version));
+        Throws<InvalidDataException>(() => PackageContract.Validate(duplicate, version));
 
         RejectUnsafe(root, "traversal.zip", "../README.md", pluginPath, version);
         RejectUnsafe(root, "absolute.zip", "/README.md", pluginPath, version);
@@ -84,7 +92,7 @@ static void RunArchiveContractTests(string pluginPath, string version)
         Dictionary<string, byte[]> oversizedEntries = RequiredEntries(File.ReadAllBytes(pluginPath));
         oversizedEntries["README.md"] = new byte[33 * 1024 * 1024];
         WriteArchive(oversized, oversizedEntries, CompressionLevel.NoCompression);
-        Throws<InvalidDataException>(() => ArchiveContract.Validate(oversized, version));
+        Throws<InvalidDataException>(() => PackageContract.Validate(oversized, version));
 
         string symlink = Path.Combine(root, "symlink.zip");
         using (ZipArchive archive = ZipFile.Open(symlink, ZipArchiveMode.Create))
@@ -98,7 +106,7 @@ static void RunArchiveContractTests(string pluginPath, string version)
                 }
             }
         }
-        Throws<InvalidDataException>(() => ArchiveContract.Validate(symlink, version));
+        Throws<InvalidDataException>(() => PackageContract.Validate(symlink, version));
     }
     finally
     {
@@ -110,7 +118,7 @@ static Dictionary<string, byte[]> RequiredEntries(byte[] plugin)
 {
     return new Dictionary<string, byte[]>(StringComparer.Ordinal)
     {
-        [ArchiveContract.PluginFileName] = plugin,
+        [PackageContract.PluginFileName] = plugin,
         ["README.md"] = "readme"u8.ToArray(),
         ["CHANGELOG.md"] = "changelog"u8.ToArray(),
         ["LICENSE"] = "license"u8.ToArray(),
@@ -129,7 +137,7 @@ static void Reject(
     mutate(entries);
     string path = Path.Combine(root, name);
     WriteArchive(path, entries);
-    Throws<InvalidDataException>(() => ArchiveContract.Validate(path, version));
+    Throws<InvalidDataException>(() => PackageContract.Validate(path, version));
 }
 
 static void RejectUnsafe(string root, string name, string unsafeName, string pluginPath, string version)
@@ -139,7 +147,7 @@ static void RejectUnsafe(string root, string name, string unsafeName, string plu
     entries.Add(unsafeName, []);
     string path = Path.Combine(root, name);
     WriteArchive(path, entries);
-    Throws<InvalidDataException>(() => ArchiveContract.Validate(path, version));
+    Throws<InvalidDataException>(() => PackageContract.Validate(path, version));
 }
 
 static void WriteArchive(
