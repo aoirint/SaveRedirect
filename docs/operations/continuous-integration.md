@@ -40,9 +40,13 @@ pinact run --check --min-age 7
 Also extract the Bash run blocks from Composite Actions and pass each one to
 `shellcheck -s bash -` over standard input; ShellCheck does not parse YAML.
 
-Repository branch protection, required-check contexts, Actions allow-list
-settings, private vulnerability reporting, and release immutability are not
-proven by local source. Verify them before claiming stable release readiness.
+GitHub API inspection on 2026-07-20 confirmed read-only default workflow
+permissions, mandatory full-SHA action pins, and an allow-list limited to
+GitHub-owned actions plus the pinned Markdownlint action. The active default
+branch ruleset requires an up-to-date pull request with both `lint` and `test`,
+and prevents deletion and non-fast-forward updates. Private vulnerability
+reporting and immutable releases are enabled. Recheck these external settings
+before stable publication because repository source cannot enforce them.
 
 Update this document when workflow events, permissions, runners, action pins,
 quality gates, artifact retention, or publication responsibility changes.
