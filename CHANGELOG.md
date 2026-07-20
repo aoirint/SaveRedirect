@@ -26,6 +26,12 @@ All notable development changes are recorded here. This file follows
 - Enforced full-SHA and allow-listed GitHub Actions, and required both source
   lint and test checks on up-to-date default-branch pull requests.
 
+### Removed
+
+- Removed the redundant `SECURITY.md`; contribution policy owns private
+  vulnerability reporting, while the README, architecture, and operations
+  documents remain the canonical owners of product boundaries and safe use.
+
 ### Fixed
 
 - Aligned CI SDK verification with the patch roll-forward allowed by
