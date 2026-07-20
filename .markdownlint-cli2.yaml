@@ -11,6 +11,8 @@ config:
     code_blocks: false
     headings: false
     tables: false
+  MD007:
+    indent: 4
   MD024:
     siblings_only: true
   MD041: false

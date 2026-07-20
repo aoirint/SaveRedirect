@@ -22,7 +22,7 @@ All notable development changes are recorded here. This file follows
 - Kept the loader entry point focused by separating the Harmony adapter and
   framework-free path policy into cohesive source modules.
 - Adopted the canonical contributor agreement, pull-request confirmation, and
-  line-ending policy with CI drift enforcement.
+  line-ending and nested-list Markdown policies with CI drift enforcement.
 - Enforced full-SHA and allow-listed GitHub Actions, and required both source
   lint and test checks on up-to-date default-branch pull requests.
 
