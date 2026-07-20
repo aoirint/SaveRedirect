@@ -192,6 +192,10 @@ public static class ArchiveContract
             throw new FileNotFoundException("Required package input is missing.", source);
         }
 
-        archive.CreateEntryFromFile(source, name, CompressionLevel.Optimal);
+        ZipArchiveEntry entry = archive.CreateEntry(name, CompressionLevel.Optimal);
+        entry.LastWriteTime = new DateTimeOffset(1980, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        using Stream input = File.OpenRead(source);
+        using Stream output = entry.Open();
+        input.CopyTo(output);
     }
 }
