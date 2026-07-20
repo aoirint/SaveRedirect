@@ -16,9 +16,9 @@ All notable development changes are recorded here. This file follows
 
 ### Changed
 
-- Moved host-neutral package creation into the plugin project and retained
-  final-archive and mutation validation in the test project, removing the
-  unnecessary standalone package executable.
+- Removed the standalone package executable and aligned host-neutral ZIP
+  creation with the CI-owned staging used by related BepInEx repositories;
+  final-archive and mutation validation remains in the test project.
 - Kept the loader entry point focused by separating the Harmony adapter and
   framework-free path policy into cohesive source modules.
 - Adopted the canonical contributor agreement, pull-request confirmation, and

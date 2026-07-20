@@ -30,6 +30,66 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/test-source
+      - name: Create and validate artifact
+        shell: pwsh
+        run: |
+          $version = (dotnet msbuild SaveRedirect/SaveRedirect.csproj `
+            -getProperty:Version -nologo).Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') {
+            throw "Project version is not a supported package version: $version"
+          }
+          $plugin = (Resolve-Path `
+            "SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll").Path
+          $packageDirectory = [IO.Path]::GetFullPath("artifacts")
+          [IO.Directory]::CreateDirectory($packageDirectory) | Out-Null
+          $package = Join-Path $packageDirectory "SaveRedirect-$version.zip"
+          $reproduction = Join-Path $env:RUNNER_TEMP "SaveRedirect-$version.zip"
+
+          function New-SaveRedirectPackage([string] $output) {
+            $staging = Join-Path $env:RUNNER_TEMP `
+              "save-redirect-package-$([Guid]::NewGuid().ToString('N'))"
+            [IO.Directory]::CreateDirectory($staging) | Out-Null
+            try {
+              $inputs = [ordered]@{
+                "com.aoirint.SaveRedirect.dll" = $plugin
+                "README.md" = [IO.Path]::GetFullPath("README.md")
+                "CHANGELOG.md" = [IO.Path]::GetFullPath("CHANGELOG.md")
+                "LICENSE" = [IO.Path]::GetFullPath("LICENSE")
+              }
+              foreach ($entry in $inputs.GetEnumerator()) {
+                $destination = Join-Path $staging $entry.Key
+                [IO.File]::Copy($entry.Value, $destination)
+                [IO.File]::SetLastWriteTimeUtc(
+                  $destination,
+                  [DateTime]::new(1980, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
+                )
+              }
+              if ([IO.File]::Exists($output)) {
+                [IO.File]::Delete($output)
+              }
+              [IO.Compression.ZipFile]::CreateFromDirectory(
+                $staging,
+                $output,
+                [IO.Compression.CompressionLevel]::Optimal,
+                $false
+              )
+            } finally {
+              [IO.Directory]::Delete($staging, $true)
+            }
+          }
+
+          New-SaveRedirectPackage $package
+          New-SaveRedirectPackage $reproduction
+          $hash = (Get-FileHash -Algorithm SHA256 $package).Hash.ToLowerInvariant()
+          $reproductionHash = (Get-FileHash `
+            -Algorithm SHA256 $reproduction).Hash.ToLowerInvariant()
+          if ($hash -ne $reproductionHash) {
+            throw "Repeated package creation produced different bytes."
+          }
+          dotnet run --project SaveRedirect.Tests --configuration Release `
+            --no-build -- $plugin $version $package
+          "$hash  SaveRedirect-$version.zip" | Set-Content `
+            -Encoding ascii artifacts/SHA256SUMS
       - name: Upload validated edge artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

@@ -4,9 +4,11 @@
 
 The `Pull Request` workflow validates pull requests and merge-queue groups.
 Superseded pull-request runs are canceled, while merge-queue runs complete.
-The `Main` workflow repeats validation on each exact `main` commit and retains
-the resulting development package for 14 days. Neither workflow publishes a
-release or exposes a manual-dispatch operation.
+The `Main` workflow repeats validation on each exact `main` commit, creates and
+validates the release-shaped development ZIP in its build job, and retains it
+for 14 days. This matches the event and packaging ownership used by the related
+BepInEx repositories. Neither workflow publishes a release or exposes a
+manual-dispatch operation.
 
 All jobs have read-only repository access and no secrets. Linux workflow lint
 uses `ubuntu-24.04`. Plugin compilation and archive validation use
@@ -22,9 +24,10 @@ The workflows verify:
 - locked NuGet restore and the stable SDK feature band selected by
   `global.json`;
 - formatting and warnings-as-errors Release compilation;
-- path-confinement and archive mutation tests;
+- path-confinement and archive mutation tests on proposed and integrated source;
 - plugin assembly identity and BepInEx attributes; and
-- deterministic package creation and final-archive validation.
+- deterministic package creation and final-archive validation on the exact
+  integrated commit.
 
 The retained artifact is named `SaveRedirect-<source-commit>` and contains the
 validated package plus `SHA256SUMS`. It is a development artifact, not a stable

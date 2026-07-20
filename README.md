@@ -37,16 +37,13 @@ dotnet format SaveRedirect.slnx --no-restore --verify-no-changes
 dotnet build SaveRedirect.slnx --configuration Release --no-restore --warnaserror
 $version = (dotnet msbuild SaveRedirect/SaveRedirect.csproj `
   -getProperty:Version -nologo).Trim()
-dotnet msbuild SaveRedirect/SaveRedirect.csproj `
-  -target:PackageSaveRedirect -property:Configuration=Release -nologo
 dotnet run --project SaveRedirect.Tests --configuration Release --no-build -- `
-  SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
-  "artifacts/SaveRedirect-$version.zip" $version
+  SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll $version
 ```
 
-`PackageSaveRedirect` belongs to the plugin project and produces the
-host-neutral development ZIP. `SaveRedirect.Tests` validates the completed
-archive and actual BepInEx assembly attributes. No Thunderstore or stable
+As in the related BepInEx repositories, CI owns staging and ZIP creation rather
+than the runtime plugin project. `SaveRedirect.Tests` validates the completed
+CI archive and actual BepInEx assembly attributes. No Thunderstore or stable
 GitHub Release publication is configured while live compatibility evidence
 remains incomplete.
 

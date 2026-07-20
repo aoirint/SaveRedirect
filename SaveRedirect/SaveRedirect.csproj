@@ -17,39 +17,4 @@
     <PackageReference Include="BepInEx.Analyzers" Version="[1.0.8]" PrivateAssets="all" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="[2.1.0]" PrivateAssets="all" />
   </ItemGroup>
-
-  <Target Name="PackageSaveRedirect" DependsOnTargets="Build">
-    <PropertyGroup>
-      <SaveRedirectPackageOutput Condition="'$(SaveRedirectPackageOutput)' == ''">$(MSBuildProjectDirectory)\..\artifacts\SaveRedirect-$(Version).zip</SaveRedirectPackageOutput>
-      <_SaveRedirectPackageRoot>$(IntermediateOutputPath)package\</_SaveRedirectPackageRoot>
-      <_SaveRedirectPackageOutputDirectory>$([System.IO.Path]::GetDirectoryName('$(SaveRedirectPackageOutput)'))</_SaveRedirectPackageOutputDirectory>
-    </PropertyGroup>
-    <ItemGroup>
-      <_SaveRedirectPackageInput Include="$(TargetPath)">
-        <PackagePath>$(AssemblyName).dll</PackagePath>
-      </_SaveRedirectPackageInput>
-      <_SaveRedirectPackageInput Include="$(MSBuildProjectDirectory)\..\README.md">
-        <PackagePath>README.md</PackagePath>
-      </_SaveRedirectPackageInput>
-      <_SaveRedirectPackageInput Include="$(MSBuildProjectDirectory)\..\CHANGELOG.md">
-        <PackagePath>CHANGELOG.md</PackagePath>
-      </_SaveRedirectPackageInput>
-      <_SaveRedirectPackageInput Include="$(MSBuildProjectDirectory)\..\LICENSE">
-        <PackagePath>LICENSE</PackagePath>
-      </_SaveRedirectPackageInput>
-      <_SaveRedirectStagedFile Include="@(_SaveRedirectPackageInput->'$(_SaveRedirectPackageRoot)%(PackagePath)')" />
-    </ItemGroup>
-    <RemoveDir Directories="$(_SaveRedirectPackageRoot)" />
-    <MakeDir Directories="$(_SaveRedirectPackageRoot);$(_SaveRedirectPackageOutputDirectory)" />
-    <Copy
-      SourceFiles="@(_SaveRedirectPackageInput)"
-      DestinationFiles="@(_SaveRedirectPackageInput->'$(_SaveRedirectPackageRoot)%(PackagePath)')"
-    />
-    <Touch Files="@(_SaveRedirectStagedFile)" Time="1980-01-01T00:00:00Z" />
-    <ZipDirectory
-      SourceDirectory="$(_SaveRedirectPackageRoot)"
-      DestinationFile="$(SaveRedirectPackageOutput)"
-      Overwrite="true"
-    />
-  </Target>
 </Project>

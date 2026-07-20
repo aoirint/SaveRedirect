@@ -47,36 +47,12 @@ runs:
         dotnet build SaveRedirect.slnx --configuration Release --no-restore
         --warnaserror
 
-    - name: Create reproducible package
+    - name: Run boundary and archive tests
       shell: pwsh
       run: |
         $version = (dotnet msbuild SaveRedirect/SaveRedirect.csproj `
           -getProperty:Version -nologo).Trim()
-        if ($version -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') {
-          throw "Project version is not a supported package version: $version"
-        }
-        dotnet msbuild SaveRedirect/SaveRedirect.csproj `
-          -target:PackageSaveRedirect -property:Configuration=Release -nologo
-        $package = (Resolve-Path "artifacts/SaveRedirect-$version.zip").Path
-        $reproduction = Join-Path $env:RUNNER_TEMP "SaveRedirect-$version.zip"
-        dotnet msbuild SaveRedirect/SaveRedirect.csproj `
-          -target:PackageSaveRedirect -property:Configuration=Release `
-          "-property:SaveRedirectPackageOutput=$reproduction" -nologo
-        $hash = (Get-FileHash -Algorithm SHA256 $package).Hash.ToLowerInvariant()
-        $reproductionHash = (Get-FileHash -Algorithm SHA256 $reproduction).Hash.ToLowerInvariant()
-        if ($hash -ne $reproductionHash) {
-          throw "Repeated package creation produced different bytes."
-        }
-        "$hash  SaveRedirect-$version.zip" | Set-Content `
-          -Encoding ascii artifacts/SHA256SUMS
-        "SAVE_REDIRECT_VERSION=$version" | Out-File `
-          -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-    - name: Run boundary and archive tests
-      shell: pwsh
-      run: >-
         dotnet run --project SaveRedirect.Tests --configuration Release
-        --no-build --
-        SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll
-        artifacts/SaveRedirect-$env:SAVE_REDIRECT_VERSION.zip
-        $env:SAVE_REDIRECT_VERSION
+          --no-build -- `
+          SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
+          $version

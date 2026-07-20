@@ -5,19 +5,25 @@ using Mono.Cecil;
 using SaveRedirect;
 using SaveRedirect.Tests;
 
-if (args.Length != 3 || !File.Exists(args[0]) || !File.Exists(args[1]))
+if (
+    args.Length is not (2 or 3)
+    || !File.Exists(args[0])
+    || (args.Length == 3 && !File.Exists(args[2]))
+)
 {
-    Console.Error.WriteLine("Pass the built plugin DLL, package ZIP, and expected version.");
+    Console.Error.WriteLine("Pass the built plugin DLL, expected version, and optional package ZIP.");
     return 2;
 }
 
 string pluginPath = Path.GetFullPath(args[0]);
-string packagePath = Path.GetFullPath(args[1]);
-string version = args[2];
+string version = args[1];
 RunPathPolicyTests();
 PackageContract.ValidatePlugin(File.ReadAllBytes(pluginPath), version);
 RunArchiveContractTests(pluginPath, version);
-PackageContract.Validate(packagePath, version);
+if (args.Length == 3)
+{
+    PackageContract.Validate(Path.GetFullPath(args[2]), version);
+}
 return 0;
 
 static void RunPathPolicyTests()
