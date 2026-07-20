@@ -52,7 +52,9 @@ runs:
       run: |
         $version = (dotnet msbuild SaveRedirect/SaveRedirect.csproj `
           -getProperty:Version -nologo).Trim()
-        dotnet run --project SaveRedirect.Tests --configuration Release
+        dotnet run `
+          --project SaveRedirect.Tests `
+          --configuration Release `
           --no-build -- `
           SaveRedirect/bin/Release/netstandard2.1/com.aoirint.SaveRedirect.dll `
           $version
