@@ -1,0 +1,16 @@
+---
+globs:
+  - "**/*.md"
+ignores:
+  - ".agents/**"
+gitignore: true
+config:
+  default: true
+  MD013:
+    line_length: 120
+    code_blocks: false
+    headings: false
+    tables: false
+  MD024:
+    siblings_only: true
+  MD041: false

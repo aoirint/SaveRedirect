@@ -1,0 +1,22 @@
+# Build output
+**/bin/
+**/obj/
+artifacts/
+
+# Local game and mod-manager data
+game/
+profiles/
+runs/
+*.log
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Editors and agent workspaces
+.idea/
+.vscode/
+.agents/worktrees/
+.DS_Store
+Thumbs.db
