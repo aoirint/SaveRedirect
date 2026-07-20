@@ -9,7 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../SaveRedirect/SaveRedirect.csproj" />
-    <ProjectReference Include="../SaveRedirect.Package/SaveRedirect.Package.csproj" />
     <PackageReference Include="Mono.Cecil" Version="[0.11.4]" />
   </ItemGroup>
 </Project>

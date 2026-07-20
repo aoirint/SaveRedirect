@@ -2,10 +2,10 @@ using System.IO.Compression;
 
 using Mono.Cecil;
 
-namespace SaveRedirect.Package;
+namespace SaveRedirect.Tests;
 
-/// <summary>Creates and validates the host-neutral SaveRedirect package contract.</summary>
-public static class ArchiveContract
+/// <summary>Validates the host-neutral SaveRedirect package contract.</summary>
+public static class PackageContract
 {
     /// <summary>The only DLL allowed at the archive root.</summary>
     public const string PluginFileName = "com.aoirint.SaveRedirect.dll";
@@ -25,34 +25,6 @@ public static class ArchiveContract
         "CHANGELOG.md",
         "LICENSE",
     ];
-
-    /// <summary>Create one deterministic-layout ZIP and validate the produced bytes.</summary>
-    public static void Create(string plugin, string output, string repositoryRoot, string version)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(plugin);
-        ArgumentException.ThrowIfNullOrWhiteSpace(output);
-        ArgumentException.ThrowIfNullOrWhiteSpace(repositoryRoot);
-        ArgumentException.ThrowIfNullOrWhiteSpace(version);
-
-        ValidatePlugin(File.ReadAllBytes(plugin), version);
-        if (File.Exists(output))
-        {
-            throw new IOException("Package output already exists.");
-        }
-
-        string? outputDirectory = Path.GetDirectoryName(Path.GetFullPath(output));
-        Directory.CreateDirectory(outputDirectory!);
-        using (ZipArchive archive = ZipFile.Open(output, ZipArchiveMode.Create))
-        {
-            AddFile(archive, plugin, PluginFileName);
-            foreach (string name in RequiredFiles.Where(name => name != PluginFileName))
-            {
-                AddFile(archive, Path.Combine(repositoryRoot, name), name);
-            }
-        }
-
-        Validate(output, version);
-    }
 
     /// <summary>Validate archive paths, the exact file set, and semantic plugin identity.</summary>
     public static void Validate(string archivePath, string version)
@@ -183,19 +155,5 @@ public static class ArchiveContract
         {
             throw new InvalidDataException($"Plugin {label} does not match.");
         }
-    }
-
-    private static void AddFile(ZipArchive archive, string source, string name)
-    {
-        if (!File.Exists(source))
-        {
-            throw new FileNotFoundException("Required package input is missing.", source);
-        }
-
-        ZipArchiveEntry entry = archive.CreateEntry(name, CompressionLevel.Optimal);
-        entry.LastWriteTime = new DateTimeOffset(1980, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        using Stream input = File.OpenRead(source);
-        using Stream output = entry.Open();
-        input.CopyTo(output);
     }
 }
