@@ -4,6 +4,11 @@ description: Check workflows, immutable action pins, and committed Markdown.
 runs:
   using: composite
   steps:
+    - name: Check APM project metadata
+      uses: ./.github/actions/check-apm-project
+      with:
+        expected-apm-version: "0.25.0"
+
     - uses: ./.github/actions/install-workflow-tools
 
     - name: Lint GitHub Actions

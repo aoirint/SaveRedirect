@@ -1,5 +1,5 @@
 name: save_redirect
-version: 0.1.0
+version: 0.0.0
 description: Reproducible agent skills for SaveRedirect maintenance
 author: aoirint
 # Which agent platforms to deploy to.
@@ -11,7 +11,7 @@ targets:
 dependencies:
   apm:
     - git: aoirint/skills
-      ref: 7a4042304705253bd5d15f17c3387dc655b11ea0
+      ref: 8a315e49001597b260c1c2e1b5b348ebedba4f0c
       skills:
         - apm-usage
         - bepinex-mono-mod-quality-check
