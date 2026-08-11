@@ -12,8 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  checks:
-    name: Checks
+  lint:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -25,7 +24,7 @@ jobs:
         uses: ./.github/actions/lint-source
   build:
     name: Build
-    needs: checks
+    needs: lint
     runs-on: windows-2025
     timeout-minutes: 20
     steps:
