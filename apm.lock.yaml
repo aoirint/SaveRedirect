@@ -1,15 +1,15 @@
 lockfile_version: '1'
-generated_at: '2026-08-11T06:38:54.634675+00:00'
+generated_at: '2026-08-11T07:14:22.111353+00:00'
 apm_version: 0.27.0
 dependencies:
 - repo_url: aoirint/skills
   name: skills
   host: github.com
-  resolved_commit: bd19f9e124aeb6947e664df29922ce3881f66609
-  resolved_ref: bd19f9e124aeb6947e664df29922ce3881f66609
+  resolved_commit: 6a1e6431bbaed762f55783c3dcd7dc4b07736596
+  resolved_ref: 6a1e6431bbaed762f55783c3dcd7dc4b07736596
   version: 0.0.0
   package_type: apm_package
-  content_hash: sha256:f5509ac40a802023b1b1b8dc5dc7d589ed5c9d7e43e6a81d369b719f2df90134
+  content_hash: sha256:ac27952ee585df0cc8fdfb53d02e4681405ca7b5eebb80f2c2d1707342adaeef
   skill_subset:
   - apm-workflow
   - bepinex-mono-mod-quality-check
