@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  lint:
+  check:
+    name: Check
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -21,10 +22,10 @@ jobs:
         with:
           persist-credentials: false
       - name: Run source checks
-        uses: ./.github/actions/lint-source
+        uses: ./.github/actions/check-repository-source
   build:
     name: Build
-    needs: lint
+    needs: check
     runs-on: windows-2025
     timeout-minutes: 20
     steps:
@@ -33,7 +34,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Run source tests
-        uses: ./.github/actions/test-source
+        uses: ./.github/actions/test-repository-source
       - name: Create and validate artifact
         shell: pwsh
         run: |
