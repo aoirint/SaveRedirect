@@ -7,7 +7,7 @@ author: aoirint
 # Accepted values: vscode, agents, copilot, claude, cursor, opencode, codex,
 # gemini, antigravity, windsurf, kiro, agent-skills, all
 targets:
-  - agent-skills
+  - codex
 dependencies:
   apm:
     - git: aoirint/skills

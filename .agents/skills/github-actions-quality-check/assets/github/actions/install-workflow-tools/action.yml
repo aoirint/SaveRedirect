@@ -1,0 +1,15 @@
+name: Install workflow validation tools
+description: Install checksum-verified ShellCheck, actionlint, and pinact binaries.
+
+outputs:
+  installation-directory:
+    description: Temporary directory containing the installed tools.
+    value: ${{ steps.install.outputs.installation-directory }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install workflow validation tools
+      id: install
+      shell: bash
+      run: bash "${{ github.action_path }}/install-workflow-tools.sh"

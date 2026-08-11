@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "templates": [
+    {
+      "id": "repository-gitattributes",
+      "source": "repository/.gitattributes",
+      "destination": ".gitattributes",
+      "comparison": "text-normalized-newlines"
+    },
+    {
+      "id": "repository-contributing",
+      "source": "repository/CONTRIBUTING.md",
+      "destination": "CONTRIBUTING.md",
+      "comparison": "text-normalized-newlines"
+    },
+    {
+      "id": "github-pull-request-template",
+      "source": "github/pull_request_template.md",
+      "destination": ".github/pull_request_template.md",
+      "comparison": "text-normalized-newlines"
+    },
+    {
+      "id": "github-resolve-bepinex-version",
+      "source": "github/actions/resolve-bepinex-version/action.yml",
+      "destination": ".github/actions/resolve-bepinex-version/action.yml",
+      "comparison": "text-normalized-newlines"
+    },
+    {
+      "id": "github-deploy-bepinex-thunderstore-action",
+      "source": "github/actions/deploy-bepinex-thunderstore/action.yml",
+      "destination": ".github/actions/deploy-bepinex-thunderstore/action.yml",
+      "comparison": "text-normalized-newlines"
+    },
+    {
+      "id": "github-deploy-bepinex-thunderstore-script",
+      "source": "github/actions/deploy-bepinex-thunderstore/publish-thunderstore.sh",
+      "destination": ".github/actions/deploy-bepinex-thunderstore/publish-thunderstore.sh",
+      "comparison": "bytes"
+    }
+  ]
+}
