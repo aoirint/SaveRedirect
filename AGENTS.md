@@ -18,7 +18,7 @@ directly.
   and enforce their cooldown independently.
 - To update Skills, review source and license changes, update the full commit
   pin in `apm.yml`, remove only the validated project lock, regenerate it with
-  APM 0.27.0, then run `apm install --frozen` and `apm audit --ci`. Commit the
+  APM 0.28.0, then run `apm install --frozen` and `apm audit --ci`. Commit the
   manifest, lockfile, notices, and generated `.agents/skills/` changes together.
 
 ## Markdown Checks
