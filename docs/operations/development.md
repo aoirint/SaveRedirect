@@ -9,7 +9,7 @@
 ## Agent skills
 
 The repository pins its development skills from `aoirint/skills` in `apm.yml`.
-After installing the reviewed APM CLI, restore the exact selected subset and
+Install APM CLI 0.35.0, then restore the selected skills and
 verify its deployed-file hashes:
 
 ```powershell
@@ -19,7 +19,7 @@ apm audit --ci
 
 Do not hand-edit `.agents/skills` or `apm.lock.yaml`. Update the source pin,
 skill selection, lockfile, and [third-party notice](../../THIRD_PARTY_NOTICES.md)
-together through an approved APM update.
+together using the update procedure in [AGENTS.md](../../AGENTS.md).
 
 ## Verification
 
