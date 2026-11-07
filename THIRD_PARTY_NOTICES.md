@@ -3,10 +3,10 @@
 ## aoirint/skills
 
 - Source: [aoirint/skills](https://github.com/aoirint/skills)
-- Selected revision: `1bbdf247da61492e8c1531f341aae400a04b9503`
+- Selected revision: `d7e4e238f6aa4f80b1be13194a0e291bc18aef0f`
 - Virtual path: skill bundle; the exact selected skill subset is recorded in
   `apm.yml` and `apm.lock.yaml`.
-- License: [MIT](https://github.com/aoirint/skills/blob/1bbdf247da61492e8c1531f341aae400a04b9503/LICENSE)
+- License: [MIT](https://github.com/aoirint/skills/blob/d7e4e238f6aa4f80b1be13194a0e291bc18aef0f/LICENSE)
 
 The maintainer waived the waiting period only for this direct
 `aoirint/skills` commit. Dependencies remain subject to normal review and
