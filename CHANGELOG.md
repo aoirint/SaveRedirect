@@ -16,8 +16,9 @@ All notable development changes are recorded here. This file follows
 
 ### Changed
 
-- Use .NET SDK 11.0.100 for local and CI builds and configure a seven-day
-  NuGet cooldown for automatic version selection.
+- Use .NET SDK 11.0.100 for local and CI builds, target .NET 11 in the
+  test harness, and configure a seven-day NuGet cooldown for automatic
+  version selection.
 - Removed the standalone package executable and aligned host-neutral ZIP
   creation with the CI-owned staging used by related BepInEx repositories;
   final-archive and mutation validation remains in the test project.

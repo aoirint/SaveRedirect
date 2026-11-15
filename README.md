@@ -53,8 +53,6 @@ supported operations and restore limitations.
 ## Build and test
 
 Install the .NET 11 SDK selected by `global.json`.
-Install .NET SDK 10.0.302 alongside it to run the unchanged `net10.0` tests;
-CI installs both SDKs and selects .NET 11 for builds.
 
 ```powershell
 dotnet restore SaveRedirect.slnx --locked-mode
