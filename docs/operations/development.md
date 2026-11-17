@@ -41,8 +41,6 @@ Use the checked-in package sources and source mappings.
    tests. Keep the project and lockfile changes together in the PR and verify
    its CI before merging.
 
-### SaveRedirect commands
-
 Run from the repository root in PowerShell. For a plugin dependency update:
 
 ```powershell
