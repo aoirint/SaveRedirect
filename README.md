@@ -29,17 +29,6 @@ The patch applies only to Easy Save 3 file storage under
 keep their original behavior. The root policy is lexical confinement, not a
 sandbox against another plugin executing in the same process.
 
-## NuGet minimum publish age
-
-The SDK selected by `global.json` provides NuGet 8 without changing the mod's
-runtime target.
-Both configured NuGet sources use a seven-day minimum publish age
-(`minPublishAgeHours="168"`).
-Keep package references non-floating and review lockfile changes.
-
-See [NuGet minimum publish age](docs/domain/dependencies.md#nuget-minimum-publish-age)
-for how the filter works and what it does not cover.
-
 ## Build and test
 
 Install the .NET 11 SDK selected by `global.json`.
