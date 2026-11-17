@@ -21,6 +21,34 @@ Do not hand-edit `.agents/skills` or `apm.lock.yaml`. Update the source pin,
 skill selection, lockfile, and [third-party notice](../../THIRD_PARTY_NOTICES.md)
 together using the update procedure in [AGENTS.md](../../AGENTS.md).
 
+## Dependency updates
+
+Run these commands from the repository root in PowerShell.
+
+Wait seven days after a package version is published unless a trusted
+security advisory warrants an earlier update.
+
+For a plugin dependency update:
+
+```powershell
+dotnet restore SaveRedirect/SaveRedirect.csproj `
+  --configfile nuget.config --force-evaluate --use-lock-file
+```
+
+For a test dependency update:
+
+```powershell
+dotnet restore SaveRedirect.Tests/SaveRedirect.Tests.csproj `
+  --configfile nuget.config --force-evaluate --use-lock-file
+```
+
+Verify the solution's lockfiles:
+
+```powershell
+dotnet restore SaveRedirect.slnx `
+  --configfile nuget.config --locked-mode
+```
+
 ## Verification
 
 Run the commands in the root README in order. Restore must not change any
