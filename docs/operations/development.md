@@ -58,7 +58,7 @@ dotnet restore SaveRedirect.Tests/SaveRedirect.Tests.csproj `
   --configfile nuget.config --force-evaluate --use-lock-file
 ```
 
-After reviewing the diff, verify the solution's lockfiles:
+Verify the solution's lockfiles:
 
 ```powershell
 dotnet restore SaveRedirect.slnx `
