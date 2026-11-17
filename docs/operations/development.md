@@ -41,18 +41,29 @@ Use the checked-in package sources and source mappings.
    tests. Keep the project and lockfile changes together in the PR and verify
    its CI before merging.
 
-Run from the repository root in PowerShell. For a plugin dependency update:
+Run from the repository root in PowerShell. Both projects use the root
+`nuget.config` and have separate lockfiles.
+
+For a plugin dependency update:
 
 ```powershell
 dotnet restore SaveRedirect/SaveRedirect.csproj `
   --configfile nuget.config --force-evaluate --use-lock-file
+```
+
+For a test dependency update:
+
+```powershell
+dotnet restore SaveRedirect.Tests/SaveRedirect.Tests.csproj `
+  --configfile nuget.config --force-evaluate --use-lock-file
+```
+
+After reviewing the diff, verify the solution's lockfiles:
+
+```powershell
 dotnet restore SaveRedirect.slnx `
   --configfile nuget.config --locked-mode
 ```
-
-For a test dependency, substitute
-`SaveRedirect.Tests/SaveRedirect.Tests.csproj` in the first command.
-The solution-level locked restore stays the same.
 
 See [Build and test](../../README.md#build-and-test) for
 the normal Release build and Windows test-harness commands.
