@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net10.0": {
+    "net11.0": {
       "Mono.Cecil": {
         "type": "Direct",
         "requested": "[0.11.6, 0.11.6]",
@@ -45,8 +45,7 @@
         "contentHash": "65mB+bHjT6UCGCgO+/pYhpuGPf96rQ1Whwkut/x7cqVIW0DTndDFyWc/3bngzhnY/Y6IYtBMlXsU2ATq+CxpHg==",
         "dependencies": {
           "Mono.Cecil": "0.11.4",
-          "MonoMod.Utils": "21.12.13.1",
-          "System.Reflection.TypeExtensions": "4.7.0"
+          "MonoMod.Utils": "21.12.13.1"
         }
       },
       "MonoMod.Utils": {
@@ -54,19 +53,13 @@
         "resolved": "21.12.13.1",
         "contentHash": "/H+0RMWqx/D1/fSuY5jhY6GFvqhdYdlnI7J3IfL8P6y4nJkoZDxqts6+RxWWOz4pbnJdWnxSjS8XG+Lq6rUi7w==",
         "dependencies": {
-          "Mono.Cecil": "0.11.4",
-          "System.Reflection.TypeExtensions": "4.7.0"
+          "Mono.Cecil": "0.11.4"
         }
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
-      },
-      "System.Reflection.TypeExtensions": {
-        "type": "Transitive",
-        "resolved": "4.7.0",
-        "contentHash": "VybpaOQQhqE6siHppMktjfGBw1GCwvCqiufqmP8F1nj7fTUNtW35LOEt3UZTEsECfo+ELAl/9o9nJx3U91i7vA=="
       },
       "UnityEngine.Modules": {
         "type": "Transitive",
