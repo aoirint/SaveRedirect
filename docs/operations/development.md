@@ -25,6 +25,7 @@ together using the update procedure in [AGENTS.md](../../AGENTS.md).
 
 Run from the repository root in PowerShell. Both projects use the root
 `nuget.config` and have separate lockfiles.
+NuGet applies a seven-day cooldown to automatic version selection.
 
 For a plugin dependency update:
 
